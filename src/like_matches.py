@@ -1,15 +1,20 @@
-matches = {}   # { (id1, id2): Match }
+matches = {}  # { (id1, id2): {...} }
 
-class Match:
-    def __init__(self, id1, id2):
-        self.ids = tuple(sorted([id1, id2]))
-        self.mensagens = 450
-
-def criar(id1, id2):
+def criar(id1, id2, utilizadores):
+    if id1 not in utilizadores:
+        print("[ERRO] O teu ID não existe.")
+        return False
+    if id2 not in utilizadores:
+        print("[ERRO] O ID alvo não existe.")
+        return False
+    if id1 == id2:
+        print("[ERRO] Não podes dar like a ti próprio.")
+        return False
     chave = tuple(sorted([id1, id2]))
     if chave in matches:
+        print("[ERRO] Este match já existe.")
         return False
-    matches[chave] = Match(id1, id2)
+    matches[chave] = {"ids": chave, "mensagens": 450}
     return True
 
 def ler():
@@ -17,18 +22,34 @@ def ler():
         print("Sem matches.")
         return
     for m in matches.values():
-        print(f"Match {list(m.ids)} | Msgs: {m.mensagens}")
+        print(f"Match {list(m['ids'])} | Msgs: {m['mensagens']}")
 
 def atualizar(id1, id2, gastas):
     chave = tuple(sorted([id1, id2]))
-    if chave in matches:
-        matches[chave].mensagens -= gastas
-        return True
-    return False
+    if chave not in matches:
+        print("[ERRO] Match não encontrado.")
+        return False
+    if gastas <= 0:
+        print("[ERRO] O número de mensagens tem de ser positivo.")
+        return False
+    if matches[chave]["mensagens"] < gastas:
+        print(f"[ERRO] Saldo insuficiente. Tens apenas {matches[chave]['mensagens']} mensagens.")
+        return False
+    matches[chave]["mensagens"] -= gastas
+    return True
 
 def eliminar(id1, id2):
     chave = tuple(sorted([id1, id2]))
-    if chave in matches:
-        del matches[chave]
-        return True
-    return False
+    if chave not in matches:
+        print("[ERRO] Match não encontrado.")
+        return False
+    del matches[chave]
+    return True
+
+def atualizar(id1, id2, **campos):
+    chave = tuple(sorted([id1, id2]))
+    if chave not in matches:
+        print("[ERRO] Match não encontrado.")
+        return False
+    matches[chave].update(campos)
+    return True
