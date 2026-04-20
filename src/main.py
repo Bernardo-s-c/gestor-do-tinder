@@ -24,53 +24,54 @@ def main():
                 "data_nasc": data_nasc, "i_min": i_min, "i_max": i_max,
                 "localidade": local, "profissao": prof, "bio": bio
             })
-            print(f"\n>> Utilizador registado! ID: {id_gerado}")
+            print(f"\n[201] Utilizador registado! ID: {id_gerado}")
 
         elif op == "2":
             utilizadores.ler()
 
         elif op == "3":
             if not utilizadores.utilizadores:
-                print("[ERRO] Não há utilizadores registados.")
+                print("[204] Não há utilizadores registados.")
                 continue
             id_u = input("ID: ")
             if id_u not in utilizadores.utilizadores:
-                print("[ERRO] ID não encontrado.")
+                print("[404] ID não encontrado.")
                 continue
             if utilizadores.atualizar(id_u, bio=input("Nova Bio: ")):
-                print(">> Bio atualizada.")
+                print("[200] Bio atualizada.")
 
         elif op == "4":
             if not utilizadores.utilizadores:
-                print("[ERRO] Não há utilizadores registados.")
+                print("[204] Não há utilizadores registados.")
                 continue
             id_u = input("ID: ")
             if id_u not in utilizadores.utilizadores:
-                print("[ERRO] ID não encontrado.")
+                print("[404] ID não encontrado.")
                 continue
             if utilizadores.eliminar(id_u):
-                print(">> Removido.")
+                print("[200] Utilizador removido.")
 
         elif op == "5":
             if len(utilizadores.utilizadores) < 2:
-                print("[ERRO] São necessários pelo menos 2 utilizadores para criar um match.")
+                print("[400] São necessários pelo menos 2 utilizadores para criar um match.")
                 continue
             id1 = input("Teu ID: ")
             id2 = input("ID Alvo: ")
-            like_matches.criar(id1, id2, utilizadores.utilizadores)
+            if like_matches.criar(id1, id2, utilizadores.utilizadores):
+                print("[201] Match criado!")
 
         elif op == "6":
             like_matches.ler()
 
         elif op == "7":
             if not like_matches.matches:
-                print("[ERRO] Não há matches.")
+                print("[204] Não há matches.")
                 continue
             id1 = input("ID1: ")
             id2 = input("ID2: ")
             chave = tuple(sorted([id1, id2]))
             if chave not in like_matches.matches:
-                print("[ERRO] Match não encontrado.")
+                print("[404] Match não encontrado.")
                 continue
 
             print("\nO que queres editar?")
@@ -79,28 +80,25 @@ def main():
 
             if op_edit == "1":
                 mensagens = utils.validar_inteiro("Novo saldo de mensagens: ")
-                if mensagens < 0:
-                    print("[ERRO] O saldo não pode ser negativo.")
-                    continue
                 if like_matches.atualizar(id1, id2, mensagens=mensagens):
-                    print(">> Match atualizado.")
+                    print("[200] Match atualizado.")
             else:
-                print("[ERRO] Opção inválida.")
+                print("[400] Opção inválida.")
 
         elif op == "8":
             if not like_matches.matches:
-                print("[ERRO] Não há matches.")
+                print("[204] Não há matches.")
                 continue
             id1 = input("ID1: ")
             id2 = input("ID2: ")
             if like_matches.eliminar(id1, id2):
-                print(">> Match removido.")
+                print("[200] Match removido.")
 
         elif op == "0":
             break
 
         else:
-            print("[ERRO] Opção inválida.")
+            print("[400] Opção inválida.")
 
 if __name__ == "__main__":
     main()
