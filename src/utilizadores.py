@@ -1,6 +1,6 @@
 import uuid
 
-utilizadores = {}  # { id: {...} }
+utilizadores = {}
 
 def criar(u):
     id_u = str(uuid.uuid4())
