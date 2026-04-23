@@ -1,4 +1,4 @@
-matches = {}  # { (id1, id2): {...} }
+matches = {}
 
 def criar(id1, id2, utilizadores):
     if id1 not in utilizadores:
@@ -8,7 +8,7 @@ def criar(id1, id2, utilizadores):
         print("[404] O ID alvo não existe.")
         return False
     if id1 == id2:
-        print("[400] Não podes dar like a ti próprio.")
+        print("[401] Não podes dar like a ti próprio.")
         return False
     chave = tuple(sorted([id1, id2]))
     if chave in matches:
@@ -30,7 +30,7 @@ def atualizar(id1, id2, **campos):
         print("[404] Match não encontrado.")
         return False
     if "mensagens" in campos and campos["mensagens"] < 0:
-        print("[400] O saldo não pode ser negativo.")
+        print("[422] O saldo não pode ser negativo.")
         return False
     matches[chave].update(campos)
     return True
