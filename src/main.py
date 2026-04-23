@@ -83,7 +83,7 @@ def main():
                 if like_matches.atualizar(id1, id2, mensagens=mensagens):
                     print("[200] Match atualizado.")
             else:
-                print("[400] Opção inválida.")
+                print("[405] Opção inválida.")
 
         elif op == "8":
             if not like_matches.matches:
@@ -98,7 +98,7 @@ def main():
             break
 
         else:
-            print("[400] Opção inválida.")
+            print("[405] Opção inválida.")
 
 if __name__ == "__main__":
     main()
