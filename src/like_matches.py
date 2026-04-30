@@ -1,44 +1,39 @@
 matches = {}
 
+
 def criar(id1, id2, utilizadores):
     if id1 not in utilizadores:
-        print("[404] O teu ID não existe.")
-        return False
+        return 404, "O teu ID não existe."
     if id2 not in utilizadores:
-        print("[404] O ID alvo não existe.")
-        return False
+        return 404, "ID alvo não existe."
     if id1 == id2:
-        print("[401] Não podes dar like a ti próprio.")
-        return False
+        return 401, "Não podes dar like a ti próprio."
     chave = tuple(sorted([id1, id2]))
     if chave in matches:
-        print("[409] Este match já existe.")
-        return False
+        return 409, "Este match já existe."
     matches[chave] = {"ids": chave, "mensagens": 450}
-    return True
+    return 201, chave
+
 
 def ler():
     if not matches:
-        print("[204] Sem matches.")
-        return
-    for m in matches.values():
-        print(f"Match {list(m['ids'])} | Msgs: {m['mensagens']}")
+        return 204, "Sem matches."
+    return 200, matches
 
-def atualizar(id1, id2, **campos):
+
+def atualizar(id1, id2, mensagens):
     chave = tuple(sorted([id1, id2]))
     if chave not in matches:
-        print("[404] Match não encontrado.")
-        return False
-    if "mensagens" in campos and campos["mensagens"] < 0:
-        print("[422] O saldo não pode ser negativo.")
-        return False
-    matches[chave].update(campos)
-    return True
+        return 404, "Match não encontrado."
+    if mensagens < 0:
+        return 422, "O saldo não pode ser negativo."
+    matches[chave]["mensagens"] = mensagens
+    return 200, "Match atualizado."
+
 
 def eliminar(id1, id2):
     chave = tuple(sorted([id1, id2]))
     if chave not in matches:
-        print("[404] Match não encontrado.")
-        return False
+        return 404, "Match não encontrado."
     del matches[chave]
-    return True
+    return 200, "Match removido."
