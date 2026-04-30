@@ -1,13 +1,18 @@
-import utilizadores, like_matches, utils
+import utilizadores, like_matches, utils, like_builder
 
 def main():
+    like_builder.iniciar_like_builder()
+
     while True:
-        print("\n" + "="*20 + "\n1. Criar Utilizador\n2. Listar Utilizadores\n3. Editar Biografia\n4. Eliminar Utilizador\n" + "-"*20 + "\n5. Criar Match (Like)\n6. Listar Matches\n7. Editar Match\n8. Eliminar Match\n0. Sair\n" + "="*20)
+        print("\n" + "="*20 + "\n1. Criar Utilizador\n2. Listar Utilizadores\n3. Editar Biografia\n4. Eliminar Utilizador\n" + "-"*20 + "\n5. Dar Like\n6. Listar Matches\n7. Editar Match\n8. Eliminar Match\n0. Sair\n" + "="*20)
         op = input("Opção: ")
 
         if op == "1":
-            nome      = utils.validar_apenas_letras("Nome: ")
-            apelido   = utils.validar_apenas_letras("Apelido: ")
+            nome    = utils.validar_apenas_letras("Nome: ")
+            apelido = utils.validar_apenas_letras("Apelido: ")
+            if utilizadores.nome_existe(nome, apelido):
+                print("[409] Já existe um utilizador com esse nome e apelido.")
+                continue
             musica    = utils.menu_escolha("Gosto Musical", utils.OPCOES_MUSICA)
             hobby     = utils.menu_escolha("Hobby", utils.OPCOES_HOBBIES)
             estetica  = utils.menu_escolha("Preferência Estética", utils.OPCOES_ESTETICA)
@@ -53,12 +58,30 @@ def main():
 
         elif op == "5":
             if len(utilizadores.utilizadores) < 2:
-                print("[400] São necessários pelo menos 2 utilizadores para criar um match.")
+                print("[400] São necessários pelo menos 2 utilizadores para dar like.")
                 continue
-            id1 = input("Teu ID: ")
-            id2 = input("ID Alvo: ")
-            if like_matches.criar(id1, id2, utilizadores.utilizadores):
-                print("[201] Match criado!")
+
+            nome_proprio    = utils.validar_apenas_letras("O teu Nome: ")
+            apelido_proprio = utils.validar_apenas_letras("O teu Apelido: ")
+            id_u = utilizadores.encontrar_por_nome(nome_proprio, apelido_proprio)
+            if not id_u:
+                print("[404] Não encontrado. Verifica o teu nome e apelido.")
+                continue
+
+            print("\n--- Utilizadores disponíveis ---")
+            for u in utilizadores.utilizadores.values():
+                if u["id"] != id_u:
+                    print(f"ID: {u['id']} | {u['nome']} {u['apelido']}")
+
+            id_alvo = input("\nID do alvo: ")
+            if id_alvo not in utilizadores.utilizadores:
+                print("[404] ID alvo não encontrado.")
+                continue
+            if id_alvo == id_u:
+                print("[401] Não podes dar like a ti próprio.")
+                continue
+
+            utilizadores.dar_like(id_u, id_alvo)
 
         elif op == "6":
             like_matches.ler()
