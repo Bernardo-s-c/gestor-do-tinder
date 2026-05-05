@@ -36,4 +36,4 @@ def eliminar(id1, id2):
     if chave not in matches:
         return 404, "Match não encontrado."
     del matches[chave]
-    return 200, "Match removido."
+    return 200, chave  # Devolve os IDs removidos
