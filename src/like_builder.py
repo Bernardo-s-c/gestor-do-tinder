@@ -5,6 +5,11 @@ import like_matches
 
 
 def like_builder():
+    """
+    Percorre todos os utilizadores e verifica se existe um like mútuo entre eles.
+    Caso dois utilizadores se tenham dado like mutuamente e ainda não exista um match,
+    cria automaticamente um novo match entre eles.
+    """
     u = utilizadores.utilizadores
 
     for id1, dados1 in u.items():
@@ -22,6 +27,10 @@ def like_builder():
 
 
 def iniciar_like_builder():
+    """
+    Inicia um thread em background que executa o like_builder em ciclo contínuo,
+    verificando novos matches a cada 30 segundos.
+    """
     def loop():
         while True:
             like_builder()
@@ -29,4 +38,4 @@ def iniciar_like_builder():
 
     t = threading.Thread(target=loop, daemon=True)
     t.start()
-    print("[200] like_builder iniciado — verifica matches a cada 3 minutos.")
+    print("[200] like_builder iniciado — verifica matches a cada 30 segundos.")
