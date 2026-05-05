@@ -26,7 +26,7 @@ def criar(nome, apelido, musica, hobby, estetica, sexo, data_nasc, i_min, i_max,
         "likes": [],
     }
 
-    return 201, id_u  # o main imprime o sucesso com o ID
+    return 201, utilizadores[id_u]  # Devolve o utilizador completo
 
 
 def ler():
@@ -35,18 +35,35 @@ def ler():
     return 200, utilizadores
 
 
-def atualizar(id_u, bio):
+def atualizar(id_u, nome=None, apelido=None, musica=None, hobby=None,
+              estetica=None, sexo=None, data_nasc=None, i_min=None,
+              i_max=None, local=None, prof=None, bio=None):
     if id_u not in utilizadores:
         return 404, "Utilizador não encontrado."
-    utilizadores[id_u]["bio"] = bio
-    return 200, "Bio atualizada."
+
+    u = utilizadores[id_u]
+
+    if nome      is not None: u["nome"]      = nome
+    if apelido   is not None: u["apelido"]   = apelido
+    if musica    is not None: u["musica"]    = musica
+    if hobby     is not None: u["hobby"]     = hobby
+    if estetica  is not None: u["estetica"]  = estetica
+    if sexo      is not None: u["sexo"]      = sexo
+    if data_nasc is not None: u["data_nasc"] = data_nasc
+    if i_min     is not None: u["i_min"]     = i_min
+    if i_max     is not None: u["i_max"]     = i_max
+    if local     is not None: u["localidade"] = local
+    if prof      is not None: u["profissao"] = prof
+    if bio       is not None: u["bio"]       = bio
+
+    return 200, u  # Devolve o utilizador atualizado
 
 
 def eliminar(id_u):
     if id_u not in utilizadores:
         return 404, "Utilizador não encontrado."
     del utilizadores[id_u]
-    return 200, "Utilizador removido."
+    return 200, id_u  # Devolve o ID do utilizador removido
 
 
 def encontrar_por_nome(nome, apelido):
