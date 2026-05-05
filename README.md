@@ -35,21 +35,3 @@ like_matches.py: Gestão da base de dados de matches e mensagens.
 like_builder.py: Motor de automação para verificação de matches mútuos.
 
 utils.py: Funções auxiliares de validação de dados e menus.
-
-🚀 Como Executar
-Certifica-te de que tens o Python 3.x instalado.
-
-Descarrega todos os ficheiros para a mesma pasta.
-
-Executa o comando:
-
-Bash
-python main.py
-🛠️ Tecnologias Utilizadas
-Python 3
-
-Threading: Para o processo de verificação de matches em tempo real.
-
-UUID: Para a geração de identificadores únicos para cada utilizador.
-
-Datetime: Para gestão e validação de datas de nascimento.
