@@ -1,39 +1,55 @@
+Tinder
+Este projeto é uma aplicação de consola (CLI) desenvolvida em Python que simula o funcionamento de uma plataforma de relacionamentos. O sistema permite gerir utilizadores, registar interesses (likes) e automatiza a criação de "matches" através de um processo em background.
 
-❤️ LoveConnect — Aplicação de Dating em Python
-Descrição
-LoveConnect é uma aplicação de linha de comandos (CLI) que simula uma plataforma de dating. Permite registar utilizadores, criar matches entre eles e gerir um sistema de mensagens por match. Os dados vivem em memória durante a execução, distribuídos por dicionários Python em cada módulo.
+📋 Funcionalidades
+1. Gestão de Utilizadores
+Criação: Registo de utilizadores com validação de idade (mínimo 18 anos), preferências musicais, hobbies, estética e localização.
 
-Estrutura de Ficheiros
-FicheiroResponsabilidadeUtilizadores.pyDicionário de utilizadores + classe Utilizador + CRUDLike_matches.pyDicionário de matches + classe Match + CRUDUtils.pyOpções (MUSICA, HOBBIES, etc.) + validações de inputMain.pyMenu principal e orquestração da aplicação
+Listagem: Visualização de todos os utilizadores registados e respetivas biografias.
 
-Arquitetura de Dados
-Utilizadores.py
-pythonutilizadores = {}   # chave: id (int) → valor: Utilizador
-Like_matches.py
-pythonmatches = {}   # chave: (id1, id2) tuple ordenado → valor: Match
-A chave é sempre ordenada, por isso o par (1,2) e (2,1) são o mesmo match.
-Utils.py — guarda as tabelas de opções:
-pythonOPCOES_MUSICA, OPCOES_HOBBIES, OPCOES_ESTETICA, OPCOES_GENERO
+Edição: Atualização de dados de perfil.
 
-CRUD — Utilizadores
-FunçãoRetornoDescriçãocriar(u)True / FalseAdiciona utilizador; rejeita ID duplicadoler()—Imprime todos os utilizadoresatualizar(id, bio)True / FalseAtualiza a biografia pelo IDeliminar(id)True / FalseRemove o utilizador pelo ID
-CRUD — Matches
-FunçãoRetornoDescriçãocriar(id1, id2)True / FalseCria match se ainda não existirler()—Lista todos os matches e saldo de mensagensatualizar(id1, id2, n)True / FalseDesconta n mensagens do matcheliminar(id1, id2)True / FalseRemove o match
+Eliminação: Remoção de utilizadores do sistema.
 
-Validações — Utils.py
-FunçãoComportamentovalidar_inteiro(pergunta)Loop até receber um inteiro válidovalidar_apenas_letras(pergunta)Loop até receber só letrasvalidar_idade_18(pergunta)Aceita AAAA-MM-DD; rejeita menores de 18validar_min_max()Garante i_min >= 18 e i_max >= i_minmenu_escolha(titulo, dict)Mostra opções e valida escolha
+2. Sistema de Likes e Matches
+Dar Like: Os utilizadores podem expressar interesse noutros perfis.
 
-Menu (Main.py)
-OpçãoAção1Criar Utilizador2Listar Utilizadores3Editar Biografia4Eliminar Utilizador5Criar Match (Like)6Listar Matches7Gastar Mensagens8Eliminar Match0Sair
+Like Builder (Automático): Um serviço em background (threading) verifica a cada 30 segundos se existem likes mútuos. Se dois utilizadores se derem like um ao outro, é criado automaticamente um Match.
 
-Como Executar
-bashpython Main.py
-Não são necessárias bibliotecas externas. Python 3.8 ou superior.
+Gestão de Matches: Listagem de conexões, edição de saldo de mensagens e remoção de matches.
 
-Notas Técnicas
+3. Validações e Utilitários
+Validação de inputs (apenas letras para nomes, números inteiros para IDs).
 
-Os dados existem apenas em memória — ao fechar o programa perdem-se.
-O saldo inicial de mensagens por match é 450.
-A chave de um match é sempre uma tuple ordenada, ex: (2, 5) mesmo que o like venha de 5 para 2.
-O ID de utilizador é inserido manualmente; a aplicação rejeita IDs duplicados.
-A validação de idade usa a data atual do sistema.
+Verificação rigorosa de datas e anos bissextos para cálculo de idade.
+
+Tratamento de erros com códigos de estado baseados em HTTP (ex: 200, 201, 404, 409).
+
+📂 Estrutura do Projeto
+main.py: Ponto de entrada da aplicação e menu principal.
+
+utilizadores.py: Lógica de negócio e armazenamento de utilizadores.
+
+like_matches.py: Gestão da base de dados de matches e mensagens.
+
+like_builder.py: Motor de automação para verificação de matches mútuos.
+
+utils.py: Funções auxiliares de validação de dados e menus.
+
+🚀 Como Executar
+Certifica-te de que tens o Python 3.x instalado.
+
+Descarrega todos os ficheiros para a mesma pasta.
+
+Executa o comando:
+
+Bash
+python main.py
+🛠️ Tecnologias Utilizadas
+Python 3
+
+Threading: Para o processo de verificação de matches em tempo real.
+
+UUID: Para a geração de identificadores únicos para cada utilizador.
+
+Datetime: Para gestão e validação de datas de nascimento.
