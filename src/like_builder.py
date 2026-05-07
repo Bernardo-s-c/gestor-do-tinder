@@ -6,7 +6,7 @@ import like_matches
 
 like_time = int(os.environ.get("like_time", 30))
 
-
+ 
 def like_builder():
     """
     Percorre todos os utilizadores e verifica se existe um like mútuo entre eles.
