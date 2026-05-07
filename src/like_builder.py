@@ -1,7 +1,10 @@
+import os
 import threading
 import time
 import utilizadores
 import like_matches
+
+like_time = int(os.environ.get("like_time", 30))
 
 
 def like_builder():
@@ -34,8 +37,8 @@ def iniciar_like_builder():
     def loop():
         while True:
             like_builder()
-            time.sleep(30)
+            time.sleep(like_time)
 
     t = threading.Thread(target=loop, daemon=True)
     t.start()
-    print("[200] like_builder iniciado — verifica matches a cada 30 segundos.")
+    print(f"[200] like_builder iniciado — verifica matches a cada {like_time} segundos.")

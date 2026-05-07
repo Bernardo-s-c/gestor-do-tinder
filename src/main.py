@@ -111,7 +111,7 @@ def main():
                     print(f"ID: {u['id']} | {u['nome']} {u['apelido']}")
 
             id_alvo = input("\nID do alvo: ")
-            code, msg = utilizadores.dar_like(id_u, id_alvo)
+            code, msg = like_matches.dar_like(id_u, id_alvo, utilizadores.utilizadores)
             print(f"[{code}] {msg}")
 
         # ── Matches ───────────────────────────────────────────────────────────
@@ -142,7 +142,10 @@ def main():
             if op_edit == "1":
                 mensagens = utils.validar_inteiro("Novo saldo de mensagens: ")
                 code, resultado = like_matches.atualizar(id1, id2, mensagens)
-                print(f"[{code}] {resultado}")
+                if code == 200:
+                    print(f"[200] Match atualizado. IDs: {list(resultado)}")
+                else:
+                    print(f"[{code}] {resultado}")
             else:
                 print("[405] Opção inválida.")
 

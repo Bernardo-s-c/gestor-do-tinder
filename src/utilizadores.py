@@ -78,16 +78,3 @@ def nome_existe(nome, apelido):
         if u["nome"].lower() == nome.lower() and u["apelido"].lower() == apelido.lower():
             return True
     return False
-
-
-def dar_like(id_u, id_alvo):
-    if id_u not in utilizadores:
-        return 404, "O teu ID não existe."
-    if id_alvo not in utilizadores:
-        return 404, "ID alvo não existe."
-    if id_alvo == id_u:
-        return 401, "Não podes dar like a ti próprio."
-    if id_alvo in utilizadores[id_u]["likes"]:
-        return 409, "Já deste like a este utilizador."
-    utilizadores[id_u]["likes"].append(id_alvo)
-    return 200, "Like dado com sucesso."
