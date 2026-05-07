@@ -1,6 +1,6 @@
 import os
 import threading
-import tim
+import time
 import utilizadores
 import like_matches
 
