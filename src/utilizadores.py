@@ -26,6 +26,7 @@ def criar(nome, apelido, musica, hobby, estetica, sexo, data_nasc, i_min, i_max,
         "likes": [],
     }
 
+    guardar()
     return 201, utilizadores[id_u]  # Devolve o utilizador completo
 
 
@@ -56,6 +57,7 @@ def atualizar(id_u, nome=None, apelido=None, musica=None, hobby=None,
     if prof      is not None: u["profissao"] = prof
     if bio       is not None: u["bio"]       = bio
 
+    guardar()
     return 200, u  # Devolve o utilizador atualizado
 
 
@@ -63,6 +65,7 @@ def eliminar(id_u):
     if id_u not in utilizadores:
         return 404, "Utilizador não encontrado."
     del utilizadores[id_u]
+    guardar()
     return 200, id_u  # Devolve o ID do utilizador removido
 
 
@@ -78,3 +81,31 @@ def nome_existe(nome, apelido):
         if u["nome"].lower() == nome.lower() and u["apelido"].lower() == apelido.lower():
             return True
     return False
+
+
+# ── Persistência ──────────────────────────────────────────────────────────────
+
+import json
+import os
+
+_FICHEIRO = "utilizadores.json"
+
+
+def guardar():
+    """Guarda o estado atual dos utilizadores em ficheiro JSON."""
+    dados = {}
+    for id_u, u in utilizadores.items():
+        dados[id_u] = dict(u)
+        dados[id_u]["likes"] = list(u["likes"])
+    with open(_FICHEIRO, "w", encoding="utf-8") as f:
+        json.dump(dados, f, ensure_ascii=False, indent=2, default=str)
+
+
+def carregar():
+    """Carrega os utilizadores do ficheiro JSON, se existir."""
+    if not os.path.exists(_FICHEIRO):
+        return
+    with open(_FICHEIRO, "r", encoding="utf-8") as f:
+        dados = json.load(f)
+    utilizadores.clear()
+    utilizadores.update(dados)
