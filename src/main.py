@@ -1,6 +1,9 @@
 import utilizadores, like_matches, utils, like_builder
 
 def main():
+    utilizadores.carregar()
+    like_matches.carregar()
+    print("[200] Dados carregados.")
     like_builder.iniciar_like_builder()
 
     while True:
