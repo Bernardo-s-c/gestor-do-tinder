@@ -4,6 +4,29 @@ import os
 
 utilizadores = {}
 
+_FICHEIRO = "utilizadores.json"
+
+
+def guardar(utilizadores):
+    """Guarda o estado atual dos utilizadores em ficheiro JSON."""
+    dados = {}
+    for id_u, u in utilizadores.items():
+        dados[id_u] = dict(u)
+        dados[id_u]["likes"] = list(u["likes"])
+    with open(_FICHEIRO, "w", encoding="utf-8") as f:
+        json.dump(dados, f, ensure_ascii=False, indent=2, default=str)
+
+
+def carregar():
+    """Carrega os utilizadores do ficheiro JSON, se existir."""
+    if not os.path.exists(_FICHEIRO):
+        return utilizadores
+    with open(_FICHEIRO, "r", encoding="utf-8") as f:
+        dados = json.load(f)
+    utilizadores.clear()
+    utilizadores.update(dados)
+    return utilizadores
+
 
 def criar(nome, apelido, musica, hobby, estetica, sexo, data_nasc, i_min, i_max, local, prof, bio):
     carregar()
@@ -34,6 +57,7 @@ def criar(nome, apelido, musica, hobby, estetica, sexo, data_nasc, i_min, i_max,
 
 
 def ler():
+    carregar()
     if not utilizadores:
         return 204, "Sem utilizadores."
     return 200, utilizadores
@@ -75,6 +99,7 @@ def eliminar(id_u):
 
 
 def encontrar_por_nome(nome, apelido):
+    carregar()
     for u in utilizadores.values():
         if u["nome"].lower() == nome.lower() and u["apelido"].lower() == apelido.lower():
             return u["id"]
@@ -82,36 +107,11 @@ def encontrar_por_nome(nome, apelido):
 
 
 def nome_existe(nome, apelido):
+    carregar()
     for u in utilizadores.values():
         if u["nome"].lower() == nome.lower() and u["apelido"].lower() == apelido.lower():
             return True
     return False
 
 
-_FICHEIRO = "utilizadores.json"
 
-
-def guardar(utilizadores):
-    """Guarda o estado atual dos utilizadores em ficheiro JSON."""
-    dados = {}
-    for id_u, u in utilizadores.items():
-        dados[id_u] = dict(u)
-        dados[id_u]["likes"] = list(u["likes"])
-    with open(_FICHEIRO, "w", encoding="utf-8") as f:
-        json.dump(dados, f, ensure_ascii=False, indent=2, default=str)
-
-
-def carregar():
-    """Carrega os utilizadores do ficheiro JSON, se existir."""
-    if not os.path.exists(_FICHEIRO):
-        return utilizadores
-    with open(_FICHEIRO, "r", encoding="utf-8") as f:
-        dados = json.load(f)
-    utilizadores.clear()
-    utilizadores.update(dados)
-    return utilizadores
-
-
-def carregar_utilizadores():
-    """Devolve os utilizadores carregados do ficheiro JSON."""
-    return carregar()
