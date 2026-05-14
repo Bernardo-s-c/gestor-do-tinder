@@ -1,7 +1,12 @@
+import json
+import os
+import utilizadores as _u
+
 matches = {}
 
 
-def dar_like(id_u, id_alvo, utilizadores):
+def dar_like(id_u, id_alvo):
+    utilizadores = _u.carregar_utilizadores()
     if id_u not in utilizadores:
         return 404, "O teu ID não existe."
     if id_alvo not in utilizadores:
@@ -11,11 +16,12 @@ def dar_like(id_u, id_alvo, utilizadores):
     if id_alvo in utilizadores[id_u]["likes"]:
         return 409, "Já deste like a este utilizador."
     utilizadores[id_u]["likes"].append(id_alvo)
-    import utilizadores as _u; _u.guardar()
+    _u.guardar(utilizadores)
     return 200, "Like dado com sucesso."
 
 
-def criar(id1, id2, utilizadores):
+def criar(id1, id2):
+    utilizadores = _u.carregar_utilizadores()
     if id1 not in utilizadores:
         return 404, "O teu ID não existe."
     if id2 not in utilizadores:
@@ -37,6 +43,7 @@ def ler():
 
 
 def atualizar(id1, id2, mensagens):
+    carregar()
     chave = tuple(sorted([id1, id2]))
     if chave not in matches:
         return 404, "Match não encontrado."
@@ -48,6 +55,7 @@ def atualizar(id1, id2, mensagens):
 
 
 def eliminar(id1, id2):
+    carregar()
     chave = tuple(sorted([id1, id2]))
     if chave not in matches:
         return 404, "Match não encontrado."
@@ -55,11 +63,6 @@ def eliminar(id1, id2):
     guardar()
     return 200, chave  # Devolve os IDs removidos
 
-
-# ── Persistência ──────────────────────────────────────────────────────────────
-
-import json
-import os
 
 _FICHEIRO = "matches.json"
 
