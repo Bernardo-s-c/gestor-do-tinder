@@ -1,8 +1,15 @@
-import utilizadores, like_matches, utils, like_builder
+import utils  # inicializa o logging antes de tudo
+from utils import get_logger
+import utilizadores, like_matches, like_builder
+
+log = get_logger("main")
+
 
 def main():
+    log.info("=== Aplicação iniciada ===")
+
     utilizadores.carregar()
-    like_matches.carregar()
+    like_matches.carregar_lm()
     print("[200] Dados carregados.")
     like_builder.iniciar_like_builder()
 
@@ -67,15 +74,12 @@ def main():
                 continue
 
             print("Deixa em branco para não alterar.")
-            nome      = utils.validar_apenas_letras("Novo Nome (Enter para manter): ") or None
-            apelido   = utils.validar_apenas_letras("Novo Apelido (Enter para manter): ") or None
-            nova_bio  = input("Nova Bio (Enter para manter): ") or None
+            nome     = utils.validar_apenas_letras("Novo Nome (Enter para manter): ") or None
+            apelido  = utils.validar_apenas_letras("Novo Apelido (Enter para manter): ") or None
+            nova_bio = input("Nova Bio (Enter para manter): ") or None
 
             code, resultado = utilizadores.atualizar(
-                id_u,
-                nome=nome,
-                apelido=apelido,
-                bio=nova_bio
+                id_u, nome=nome, apelido=apelido, bio=nova_bio
             )
             if code == 200:
                 print(f"[200] Utilizador atualizado: {resultado['nome']} {resultado['apelido']} | Bio: {resultado['bio']}")
@@ -114,7 +118,7 @@ def main():
                     print(f"ID: {u['id']} | {u['nome']} {u['apelido']}")
 
             id_alvo = input("\nID do alvo: ")
-            code, msg = like_matches.dar_like(id_u, id_alvo, utilizadores.utilizadores)
+            code, msg = like_matches.dar_like(id_u, id_alvo)
             print(f"[{code}] {msg}")
 
         # ── Matches ───────────────────────────────────────────────────────────
@@ -166,6 +170,7 @@ def main():
                 print(f"[{code}] {resultado}")
 
         elif op == "0":
+            log.info("=== Aplicação encerrada pelo utilizador ===")
             break
 
         else:

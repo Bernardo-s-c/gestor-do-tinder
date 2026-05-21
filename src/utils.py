@@ -1,4 +1,24 @@
 from datetime import datetime, date
+import logging
+import os
+
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+
+LOG_FILE = os.path.join(LOG_DIR, f"like_app_{datetime.now().strftime('%Y-%m-%d')}.log")
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
+    datefmt="%d/%m/%Y %H:%M:%S",
+    handlers=[
+        logging.FileHandler(LOG_FILE, encoding="utf-8")
+    ]
+)
+
+def get_logger(nome):
+    return logging.getLogger(nome)
+
 
 OPCOES_MUSICA   = {1: "Pop", 2: "Rock", 3: "Hip-Hop", 4: "Jazz", 5: "Clássica", 6: "Reggae", 7: "Indie", 8: "Metal"}
 OPCOES_HOBBIES  = {1: "Ginásio", 2: "Leitura", 3: "Viagens", 4: "Gaming", 5: "Culinária", 6: "Dança", 7: "Séries"}
@@ -23,7 +43,6 @@ def validar_apenas_letras(pergunta):
 
 
 def validar_data(data_str):
-    # Verifica formato AAAA-MM-DD sem try/except
     partes = data_str.split("-")
     if len(partes) != 3:
         return None
@@ -34,7 +53,6 @@ def validar_data(data_str):
     if not (1 <= mes <= 12):
         return None
     dias_por_mes = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    # ano bissexto
     if (ano % 4 == 0 and ano % 100 != 0) or (ano % 400 == 0):
         dias_por_mes[2] = 29
     if not (1 <= dia <= dias_por_mes[mes]):
