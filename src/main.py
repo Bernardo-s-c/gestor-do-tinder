@@ -1,8 +1,15 @@
-import utilizadores, like_matches, utils, like_builder
+import utils  # inicializa o logging antes de tudo
+import logging
+import utilizadores, like_matches, like_builder
+
+logger = logging.getLogger("main")
+
 
 def main():
+    logger.info("=== Aplicação iniciada ===")
+
     utilizadores.carregar()
-    like_matches.carregar()
+    like_matches.carregar_lm()
     print("[200] Dados carregados.")
     like_builder.iniciar_like_builder()
 
@@ -20,6 +27,7 @@ def main():
               "\n0. Sair"
               "\n" + "="*20)
         op = input("Opção: ")
+        logger.debug(f"Opção selecionada: {op}")
 
         # ── Utilizadores ──────────────────────────────────────────────────────
 
@@ -67,9 +75,9 @@ def main():
                 continue
 
             print("Deixa em branco para não alterar.")
-            nome      = utils.validar_apenas_letras("Novo Nome (Enter para manter): ") or None
-            apelido   = utils.validar_apenas_letras("Novo Apelido (Enter para manter): ") or None
-            nova_bio  = input("Nova Bio (Enter para manter): ") or None
+            nome     = utils.validar_apenas_letras("Novo Nome (Enter para manter): ") or None
+            apelido  = utils.validar_apenas_letras("Novo Apelido (Enter para manter): ") or None
+            nova_bio = input("Nova Bio (Enter para manter): ") or None
 
             code, resultado = utilizadores.atualizar(
                 id_u,
@@ -114,7 +122,7 @@ def main():
                     print(f"ID: {u['id']} | {u['nome']} {u['apelido']}")
 
             id_alvo = input("\nID do alvo: ")
-            code, msg = like_matches.dar_like(id_u, id_alvo, utilizadores.utilizadores)
+            code, msg = like_matches.dar_like(id_u, id_alvo)
             print(f"[{code}] {msg}")
 
         # ── Matches ───────────────────────────────────────────────────────────
@@ -166,9 +174,11 @@ def main():
                 print(f"[{code}] {resultado}")
 
         elif op == "0":
+            logger.info("=== Aplicação encerrada pelo utilizador ===")
             break
 
         else:
+            logger.debug(f"Opção inválida introduzida: {op}")
             print("[405] Opção inválida.")
 
 

@@ -1,4 +1,19 @@
 from datetime import datetime, date
+import logging
+import os
+
+# ── Logger central — todos os módulos usam este setup ─────────────────────
+os.makedirs("logs", exist_ok=True)
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[
+        logging.FileHandler("logs/app.log", encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
 
 OPCOES_MUSICA   = {1: "Pop", 2: "Rock", 3: "Hip-Hop", 4: "Jazz", 5: "Clássica", 6: "Reggae", 7: "Indie", 8: "Metal"}
 OPCOES_HOBBIES  = {1: "Ginásio", 2: "Leitura", 3: "Viagens", 4: "Gaming", 5: "Culinária", 6: "Dança", 7: "Séries"}
@@ -23,7 +38,6 @@ def validar_apenas_letras(pergunta):
 
 
 def validar_data(data_str):
-    # Verifica formato AAAA-MM-DD sem try/except
     partes = data_str.split("-")
     if len(partes) != 3:
         return None
@@ -34,7 +48,6 @@ def validar_data(data_str):
     if not (1 <= mes <= 12):
         return None
     dias_por_mes = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    # ano bissexto
     if (ano % 4 == 0 and ano % 100 != 0) or (ano % 400 == 0):
         dias_por_mes[2] = 29
     if not (1 <= dia <= dias_por_mes[mes]):
