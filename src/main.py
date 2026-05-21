@@ -1,12 +1,12 @@
 import utils  # inicializa o logging antes de tudo
-import logging
+from utils import get_logger
 import utilizadores, like_matches, like_builder
 
-logger = logging.getLogger("main")
+log = get_logger("main")
 
 
 def main():
-    logger.info("=== Aplicação iniciada ===")
+    log.info("=== Aplicação iniciada ===")
 
     utilizadores.carregar()
     like_matches.carregar_lm()
@@ -27,7 +27,6 @@ def main():
               "\n0. Sair"
               "\n" + "="*20)
         op = input("Opção: ")
-        logger.debug(f"Opção selecionada: {op}")
 
         # ── Utilizadores ──────────────────────────────────────────────────────
 
@@ -80,10 +79,7 @@ def main():
             nova_bio = input("Nova Bio (Enter para manter): ") or None
 
             code, resultado = utilizadores.atualizar(
-                id_u,
-                nome=nome,
-                apelido=apelido,
-                bio=nova_bio
+                id_u, nome=nome, apelido=apelido, bio=nova_bio
             )
             if code == 200:
                 print(f"[200] Utilizador atualizado: {resultado['nome']} {resultado['apelido']} | Bio: {resultado['bio']}")
@@ -174,11 +170,10 @@ def main():
                 print(f"[{code}] {resultado}")
 
         elif op == "0":
-            logger.info("=== Aplicação encerrada pelo utilizador ===")
+            log.info("=== Aplicação encerrada pelo utilizador ===")
             break
 
         else:
-            logger.debug(f"Opção inválida introduzida: {op}")
             print("[405] Opção inválida.")
 
 

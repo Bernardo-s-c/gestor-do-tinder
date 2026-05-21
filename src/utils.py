@@ -2,18 +2,23 @@ from datetime import datetime, date
 import logging
 import os
 
-# ── Logger central — todos os módulos usam este setup ─────────────────────
-os.makedirs("logs", exist_ok=True)
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+
+LOG_FILE = os.path.join(LOG_DIR, f"like_app_{datetime.now().strftime('%Y-%m-%d')}.log")
 
 logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
+    datefmt="%d/%m/%Y %H:%M:%S",
     handlers=[
-        logging.FileHandler("logs/app.log", encoding="utf-8"),
-        logging.StreamHandler()
+        logging.FileHandler(LOG_FILE, encoding="utf-8")
     ]
 )
+
+def get_logger(nome):
+    return logging.getLogger(nome)
+
 
 OPCOES_MUSICA   = {1: "Pop", 2: "Rock", 3: "Hip-Hop", 4: "Jazz", 5: "Clássica", 6: "Reggae", 7: "Indie", 8: "Metal"}
 OPCOES_HOBBIES  = {1: "Ginásio", 2: "Leitura", 3: "Viagens", 4: "Gaming", 5: "Culinária", 6: "Dança", 7: "Séries"}
