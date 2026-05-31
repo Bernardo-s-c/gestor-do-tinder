@@ -59,7 +59,7 @@ def main():
     like_builder.iniciar_like_builder()
 
     root = tk.Tk()
-    root.title("❤  LikeApp")
+    root.title("❤  Tinder")
     root.geometry("900x780")
     root.configure(bg=BG)
     root.resizable(True, True)
@@ -95,7 +95,7 @@ def main():
     # ── header ────────────────────────────────────────────────────────────────
     hdr = tk.Frame(root, bg=BG)
     hdr.pack(fill="x", padx=20, pady=(16, 0))
-    tk.Label(hdr, text="❤  LikeApp", bg=BG, fg=ACCENT,
+    tk.Label(hdr, text="❤  Tinder", bg=BG, fg=ACCENT,
              font=("Consolas", 20, "bold")).pack(side="left")
     status_var = tk.StringVar(value="")
     tk.Label(hdr, textvariable=status_var, bg=BG, fg=MUTED,
