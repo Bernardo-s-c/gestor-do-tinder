@@ -60,9 +60,9 @@ def main():
 
     root = tk.Tk()
     root.title("❤  Tinder")
-    root.geometry("900x780")
     root.configure(bg=BG)
     root.resizable(True, True)
+    root.state("zoomed")
 
     # ── ttk styles ────────────────────────────────────────────────────────────
     style = ttk.Style(root)
@@ -118,11 +118,28 @@ def main():
     nb.add(tab_m, text="  ❤   Matches  ")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # TAB UTILIZADORES
+    # TAB UTILIZADORES — com scroll vertical
     # ══════════════════════════════════════════════════════════════════════════
 
+    canvas_u = tk.Canvas(tab_u, bg=BG, highlightthickness=0)
+    vsb_u = ttk.Scrollbar(tab_u, orient="vertical", command=canvas_u.yview)
+    canvas_u.configure(yscrollcommand=vsb_u.set)
+    vsb_u.pack(side="right", fill="y")
+    canvas_u.pack(side="left", fill="both", expand=True)
+
+    scroll_frame = tk.Frame(canvas_u, bg=BG)
+    scroll_win = canvas_u.create_window((0, 0), window=scroll_frame, anchor="nw")
+
+    def _on_frame_configure(e):
+        canvas_u.configure(scrollregion=canvas_u.bbox("all"))
+    def _on_canvas_configure(e):
+        canvas_u.itemconfig(scroll_win, width=e.width)
+    scroll_frame.bind("<Configure>", _on_frame_configure)
+    canvas_u.bind("<Configure>", _on_canvas_configure)
+    canvas_u.bind_all("<MouseWheel>", lambda e: canvas_u.yview_scroll(int(-1*(e.delta/120)), "units"))
+
     # Lista
-    list_frame = tk.Frame(tab_u, bg=BG)
+    list_frame = tk.Frame(scroll_frame, bg=BG)
     list_frame.pack(fill="both", expand=True, padx=16, pady=(14, 6))
 
     header_label(list_frame, "Utilizadores Registados").pack(anchor="w", pady=(0, 6))
@@ -156,7 +173,7 @@ def main():
         update_status()
 
     # Formulário
-    form_outer = tk.Frame(tab_u, bg=SURFACE, padx=16, pady=12)
+    form_outer = tk.Frame(scroll_frame, bg=SURFACE, padx=16, pady=12)
     form_outer.pack(fill="x", padx=16, pady=(0, 6))
 
     tk.Label(form_outer, text="Criar / Editar Utilizador", bg=SURFACE, fg=ACCENT,
@@ -296,7 +313,7 @@ def main():
         else:
             messagebox.showerror(f"Erro {code}", resultado)
 
-    btns_u = tk.Frame(tab_u, bg=BG)
+    btns_u = tk.Frame(scroll_frame, bg=BG)
     btns_u.pack(pady=(4, 12), padx=16, fill="x")
     styled_btn(btns_u, "➕  Criar Utilizador", op1_criar).pack(side="left", padx=(0, 6))
     styled_btn(btns_u, "✏  Guardar Edição",   op3_editar).pack(side="left", padx=(0, 6))
